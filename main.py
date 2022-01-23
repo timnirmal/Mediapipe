@@ -10,6 +10,9 @@ mpHands = mediapipe.solutions.hands
 hands = mpHands.Hands(min_detection_confidence=0.8, min_tracking_confidence=0.8)
 mpDraw = mediapipe.solutions.drawing_utils # For drawing landmarks
 
+# pyautoGUI move mouse to the center of the screen
+pyautogui.moveTo(pyautogui.size()[0]/2, pyautogui.size()[1]/2)
+
 while True:
     ret, img = cap.read()
     rgbImg = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
@@ -20,11 +23,17 @@ while True:
         for hand in results.multi_hand_landmarks: # For each hand in result
             for id, lm in enumerate(hand.landmark): # For each landmark in hand
                 # print(id, lm) # Print the landmark id and its coordinates
+                # Access each landmark in each Hand
                 h , w, c = img.shape
                 cx, cy = int(lm.x*w), int(lm.y*h)
                 print(id, cx, cy)   # Print the landmark id and its coordinates
                 if id == 8:
                     cv2.circle(img, (cx, cy), 15, (0, 0, 255), -1)
+                    # pyautoGUI move mouse with cx, cy with flipped horizontal axis (but in cx, cy size)
+                    #pyautogui.moveTo(pyautogui.size()[0] - cx, cy)
+
+                    # scale pyautoGUI move with cx, cy to screen size and flipped horizontal axis
+                    pyautogui.moveTo(pyautogui.size()[0] - cx*pyautogui.size()[0]/w, cy*pyautogui.size()[1]/h)
             mpDraw.draw_landmarks(img, hand, mpHands.HAND_CONNECTIONS) # Draw the landmarks
 
 
