@@ -16,6 +16,7 @@ mpDraw = mediapipe.solutions.drawing_utils  # For drawing landmarks
 id8_positions = []
 id4_positions = []
 id12_positions = []
+id16_positions = []
 position_list = []
 
 while True:
@@ -48,6 +49,11 @@ while True:
                     if len(id12_positions) == 20:
                         id12_positions.pop(0)
                     id12_positions.append((cx, cy))
+                elif id == 16:
+                    if len(id16_positions) == 20:
+                        id16_positions.pop(0)
+                    id16_positions.append((cx, cy))
+
 
                 if id == 8:
                     cv2.circle(img, (cx, cy), 15, (0, 0, 255), -1)
@@ -77,17 +83,27 @@ while True:
                     # lastPosition_x and lastPosition_y of id4_positions
                     lastPosition_4x = id4_positions[-1][0]
                     lastPosition_4y = id4_positions[-1][1]
+
+                    # lastPosition_x and lastPosition_y of id16_positions
+                    lastPosition_16x = id16_positions[-1][0]
+                    lastPosition_16y = id16_positions[-1][1]
                     # TODO: Remove Lists and Set only variables at the beginning
 
                     # if gap between lastPosition_x and cx is less than 40, and gap between lastPosition_y and cy is
                     # less than 40, then move mouse to the center of the screen
                     if abs(lastPosition_8x - cx) < 40 and abs(lastPosition_8y - cy) < 40:  # Click Method
-                        # if gap between lastPosition_8x and cx is less than 40, and gap between
-                        # lastPosition_8y and cy is less than 40, then move mouse to the center of the screen
-                        if abs(lastPosition_8x - lastPosition_4x) > 80:
-                            pyautogui.click(button='right',interval=0.1)
+                        if abs(lastPosition_16x - cx) < 40 and abs(lastPosition_16y - cy) < 40:
+                            # if gap between lastPosition_8x and cx is less than 40, and gap between
+                            # lastPosition_8y and cy is less than 40, then move mouse to the center of the screen
+                            if abs(lastPosition_8x - lastPosition_4x) > 80:
+                                pyautogui.click(button='right',interval=0.1,clicks=2)    # Right Click
+                            else:
+                                pyautogui.click(interval=0.1,clicks=2)   # Left Click
                         else:
-                            pyautogui.click(interval=0.1)
+                            if abs(lastPosition_8x - lastPosition_4x) > 80:
+                                pyautogui.click(button='right', interval=0.1)  # Right Click
+                            else:
+                                pyautogui.click(interval=0.1)  # Left Click
                         # clear id12_positions
                         # id12_positions.clear()
                         # append cx and cy to id12_positions
@@ -95,49 +111,6 @@ while True:
                         # print("12 -> ", end=" ")
                         # print(id12_positions)
 
-                # Double Click
-                """
-                if id == 4:
-                    cv2.circle(img, (cx, cy), 15, (0, 255, 255), -1)
-
-                    # print("8 -> ", end=" ")
-                    # print(id8_positions)
-                    # print("12 -> ", end=" ")
-                    # print(id12_positions)
-
-                    # if id8_positions is not empty
-                    if id8_positions and id12_positions:
-                        # lastPosition_x and lastPosition_y of id12_positions
-                        lastPosition_12x = id8_positions[-1][0]
-                        lastPosition_12y = id8_positions[-1][1]
-
-                        # lastPosition_4x and lastPosition_4y of id4_positions
-                        lastPosition_8x = id8_positions[-1][0]
-                        lastPosition_8y = id8_positions[-1][1]
-
-                        # if gap between lastPosition_8x and cx is less than 40, and gap between
-                        # lastPosition_8y and cy is less than 40, then move mouse to the center of the screen
-                        if abs(lastPosition_8x - cx) > 80:
-                            print("Done")
-                            # if gap between lastPosition_4x and lastPosition_12x is less than 40, and gap between
-                            # lastPosition_4y and lastPosition_12y is less than 40, then move mouse to the center of the
-                            # screen
-                            if abs(lastPosition_12x - lastPosition_8x) < 40 and abs(lastPosition_12y - lastPosition_8y) < 40:
-                                print("Double Click")
-                                pyautogui.doubleClick(interval=0.5)
-
-                """
-                """
-                # if lm.z is negative, move mouse up
-                if lm.z < 0:
-                    pyautogui.moveRel(0, -lm_z_avg*pyautogui.size()[1]/h)
-                # if lm.z is positive, move mouse down
-                elif lm.z > 0:
-                    pyautogui.moveRel(0, lm_z_avg*pyautogui.size()[1]/h)
-                # if lm.z is 0, move mouse to center
-                else:
-                    pyautogui.moveTo(pyautogui.size()[0]/2, pyautogui.size()[1]/2)
-                """
 
             mpDraw.draw_landmarks(img, hand, mpHands.HAND_CONNECTIONS)  # Draw the landmarks
 
