@@ -71,20 +71,29 @@ while True:
                     cv2.circle(img, (cx, cy), 15, (255, 0, 0), -1)
 
                     # lastPosition_x and lastPosition_y of id8_positions
-                    lastPosition_x = id8_positions[-1][0]
-                    lastPosition_y = id8_positions[-1][1]
+                    lastPosition_8x = id8_positions[-1][0]
+                    lastPosition_8y = id8_positions[-1][1]
+
+                    # lastPosition_x and lastPosition_y of id4_positions
+                    lastPosition_4x = id4_positions[-1][0]
+                    lastPosition_4y = id4_positions[-1][1]
+                    # TODO: Remove Lists and Set only variables at the beginning
 
                     # if gap between lastPosition_x and cx is less than 40, and gap between lastPosition_y and cy is
                     # less than 40, then move mouse to the center of the screen
-                    if abs(lastPosition_x - cx) < 40 and abs(lastPosition_y - cy) < 40:     # Click Method
-                        pyautogui.click(interval=0.1)
-
-                    # clear id12_positions
-                    # id12_positions.clear()
-                    # append cx and cy to id12_positions
-                    # id12_positions = [(cx, cy)]
-                    # print("12 -> ", end=" ")
-                    # print(id12_positions)
+                    if abs(lastPosition_8x - cx) < 40 and abs(lastPosition_8y - cy) < 40:  # Click Method
+                        # if gap between lastPosition_8x and cx is less than 40, and gap between
+                        # lastPosition_8y and cy is less than 40, then move mouse to the center of the screen
+                        if abs(lastPosition_8x - lastPosition_4x) > 80:
+                            pyautogui.click(button='right',interval=0.1)
+                        else:
+                            pyautogui.click(interval=0.1)
+                        # clear id12_positions
+                        # id12_positions.clear()
+                        # append cx and cy to id12_positions
+                        # id12_positions = [(cx, cy)]
+                        # print("12 -> ", end=" ")
+                        # print(id12_positions)
 
                 # Double Click
                 """
@@ -129,7 +138,6 @@ while True:
                 else:
                     pyautogui.moveTo(pyautogui.size()[0]/2, pyautogui.size()[1]/2)
                 """
-
 
             mpDraw.draw_landmarks(img, hand, mpHands.HAND_CONNECTIONS)  # Draw the landmarks
 
