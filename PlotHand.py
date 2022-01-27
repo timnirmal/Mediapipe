@@ -60,7 +60,7 @@ if __name__ == '__main__':
 
     while True:
         all_hands = CalcLandMarks()
-        #print("New calculation\n\n")
+        print("New calculation\n\n")
         i = 0
         # calculate time taken fo below process
         time_avg = 0
