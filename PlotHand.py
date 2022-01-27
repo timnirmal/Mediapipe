@@ -119,7 +119,6 @@ if __name__ == '__main__':
 
     while True:
         print("New calculation\n\n")
-        # calculate time taken fo below process
         count = 0
         t = time.time()
 
